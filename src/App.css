@@ -1,33 +1,205 @@
-.App {
-  text-align: center;
+/* --------global ------------ */
+button {
+  border: none;
+  height: 38px;
+  border-radius: 12px;
+  font-size: 24px;
+  margin: 0 10px;
+  background-color: palevioletred;
+  color: rgb(61, 20, 99);
+  padding: 8px 15px;
+  outline: none;
+}
+button:active,
+button:hover {
+  border: 2px solid palevioletred;
+  background-color: rgb(204, 208, 247);
+  padding: 7px 13px;
+}
+input {
+  border: none;
+  border-bottom: 2px solid palevioletred;
+  height: 30px;
+  font-size: 24px;
+  outline: none;
+  padding: 4px 8px;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+/* ----------navbar ------ */
+.nav {
+  height: 64px;
+  background-color: palevioletred;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.navWrapper {
+  width: 80%;
   display: flex;
-  flex-direction: column;
+  height: 100%;
+  vertical-align: center;
+  margin: auto;
   align-items: center;
+}
+.header {
+  flex: 1;
+}
+.header a,
+.navIcon a {
+  text-decoration: none;
+  color: rgb(61, 20, 99);
+}
+
+.header a {
+  font-size: 24px;
+}
+.navIcon a {
+  font-size: 18px;
+}
+
+.navIcons {
+  flex: 1;
+  display: block;
+  right: 0px;
+  text-align: right;
+}
+
+.navIcon {
+  display: inline;
+  margin: 0px 15px;
+}
+
+/* -----------dashboard------------ */
+.wrapper {
+  width: 90%;
+  margin: 30px auto;
+  background-color: azure;
+}
+.add-item {
+  width: 100%;
+  align-items: center;
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  margin-bottom: 30px;
 }
 
-.App-link {
-  color: #61dafb;
+.add-item input {
+  width: 80%;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+/* --------- showcase------- */
+.showcase {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-gap: 2%;
+}
+
+.showcase-item {
+  position: relative;
+  background-color: burlywood;
+}
+.showcase-item img {
+  width: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.img-highlight {
+  position: absolute;
+  bottom: 0px;
+  width: calc(100% - 16px);
+  color: rgb(221, 86, 131);
+  background-color: rgb(214, 186, 240);
+  padding: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.img-detail {
+  flex: 1;
+}
+
+.img-deatil .img-name {
+  font-size: 22px;
+  font-weight: 500;
+}
+.img-deatil .img-author {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.img-like {
+  flex: 1;
+  text-align: right;
+}
+
+/* ----------not found--------- */
+.notFound a {
+  text-decoration: none;
+}
+
+/* ----------Modal----------- */
+.modal {
+  z-index: 10;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.modal-main {
+  position: fixed;
+  background: white;
+  width: 80%;
+  height: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 14px;
+}
+
+.display-block {
+  display: block;
+}
+
+.display-none {
+  display: none;
+}
+
+/* -------------addItems----------------- */
+.add-item-form {
+  text-align: center;
+  width: 100%;
+}
+.add-item-form input {
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+}
+
+.add-button {
+  width: 100%;
+  margin: 15px;
+}
+
+/* -------Media Queries ------------- */
+@media screen and (min-width: 500px) {
+  .showcase {
+    grid-template-columns: 49% 49%;
+    grid-gap: 2%;
   }
-  to {
-    transform: rotate(360deg);
+  .wrapper {
+    width: 80%;
+  }
+  .add-item input {
+    width: auto;
+  }
+}
+
+@media screen and (min-width: 900px) {
+  .showcase {
+    grid-template-columns: 31% 31% 31%;
+    grid-gap: 3%;
+  }
+  .wrapper {
+    width: 70%;
   }
 }
