@@ -1,0 +1,36 @@
+.review-section {
+  display: block;
+  width: 100%;
+  /* background-color: red; */
+}
+.review-section > div {
+  padding-top: 10px;
+}
+
+.review {
+  display: flex;
+  flex-direction: row;
+}
+
+.add-review {
+  display: flex;
+  flex-direction: row;
+}
+.add-review textarea {
+  font-size: 20px;
+  flex: 1;
+  width: auto;
+  border: 1px solid var(--primary-color);
+  box-shadow: none;
+  border-radius: 20px;
+}
+.main-img {
+  position: relative;
+}
+.profile-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 2px 12px;
+}
