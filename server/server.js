@@ -8,6 +8,7 @@ const Image = require("./imageModel");
 const Review = require("./reviewModel");
 
 const app = express();
+var port = process.env.PORT || 5000;
 
 app.use(cors());
 
@@ -123,6 +124,6 @@ app.get("/image/:id", (req, res) => {
 
 // app.use("/api", apiRoute);
 
-app.listen(5000, () => {
+app.listen(port, () => {
   console.log("Server is running in port 5000");
 });
