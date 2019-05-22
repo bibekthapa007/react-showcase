@@ -3,7 +3,7 @@ import serverUrl from "./url";
 
 const UserContext = React.createContext("user");
 export { UserContext };
-
+//TODO:useEffect to check token is valid and user from it
 class UserProvider extends React.Component {
   state = {
     user: JSON.parse(localStorage.getItem("user")) || null,

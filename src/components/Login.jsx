@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import serverUrl from "../url";
+import "./css/Form.css";
 import { UserContext } from "../UserProvider";
 
 function Login({ history }) {
@@ -46,28 +47,33 @@ function Login({ history }) {
     setPassword(value);
   }
   return (
-    <div>
-      LoginFrom
-      <div>{message}</div>
-      <div>
-        <label htmlFor="email">Email</label>
-        <input
-          type="text"
-          name="email"
-          onChange={e => handleEmail(e.target.value)}
-          value={email}
-        />
+    <div className="form">
+      <div className="form-wrapper">
+        <h1>Login</h1>
+        <div>{message}</div>
+        <div>
+          <label htmlFor="email">Email</label>
+          <input
+            type="text"
+            className="round-input"
+            name="email"
+            onChange={e => handleEmail(e.target.value)}
+            value={email}
+          />
+        </div>
+        <div>
+          <label htmlFor="password">Password</label>
+          <input
+            type="text"
+            name="password"
+            value={password}
+            className="round-input"
+            onChange={e => handlePassword(e.target.value)}
+          />
+        </div>
+        <button onClick={() => handleSubmit()}>Submit</button>
+        <button onClick={() => history.push("/signin")}>SignIn</button>
       </div>
-      <div>
-        <label htmlFor="password">Password</label>
-        <input
-          type="text"
-          name="password"
-          value={password}
-          onChange={e => handlePassword(e.target.value)}
-        />
-      </div>
-      <button onClick={() => handleSubmit()}>Submit</button>
     </div>
   );
 }

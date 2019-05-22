@@ -4,7 +4,7 @@ function nodeMailer(req, res, next) {
   var mailOptions, link;
   var hash = req.hash;
   var host = req.get("host");
-  var clientHost = "localhost:3000";
+  var clientHost = process.env.CLIENT_URL;
   link = "http://" + clientHost + "/verify?token=" + hash;
   console.log(link);
   mailOptions = {
@@ -33,7 +33,9 @@ function nodeMailer(req, res, next) {
   transporter.sendMail(mailOptions, function(error, response) {
     if (error) {
       console.log(error);
-      res.end("error");
+      res.status(201).send({
+        error: "Error while sending the message to email"
+      });
     } else {
       transporter.close();
       res.status(200).send({

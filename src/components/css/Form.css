@@ -1,0 +1,24 @@
+.form {
+  align-items: center;
+  width: 100%;
+}
+
+.form-wrapper {
+  max-width: 700px;
+  margin: 30px auto;
+  align-items: center;
+  text-align: center;
+  justify-self: center;
+}
+
+.form label {
+  font-size: 20px;
+}
+
+.form input {
+  margin: 0px auto 20px auto;
+  width: 80%;
+  max-width: 300px;
+  display: flex;
+  justify-content: center;
+}

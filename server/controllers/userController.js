@@ -50,21 +50,30 @@ function resendToken(req, res, next) {
     }
   });
 }
+function validateEmail(email) {
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
 //Check Weather the user email is in database or not
 function checkIsEmailUnique(req, res, next) {
   const email = req.body.email;
-
-  User.find({ email }, (err, docs) => {
-    if (err) {
-      res.send("Error loding the data");
-    } else if (docs.length === 0 || docs === null) {
-      next();
-    } else {
-      res.send({
-        message: "Email is already taken"
-      });
-    }
-  });
+  if (validateEmail(email)) {
+    User.find({ email }, (err, docs) => {
+      if (err) {
+        res.status(201).send("Error loding the data");
+      } else if (docs.length === 0 || docs === null) {
+        next();
+      } else {
+        res.status(201).send({
+          message: "Email is already taken"
+        });
+      }
+    });
+  } else {
+    res.status(201).send({
+      message: "Email is invalid"
+    });
+  }
 }
 
 //it generate token using jwt with secrectkey
@@ -120,7 +129,8 @@ function addUser(req, res, next) {
   const user = {
     name: req.body.name,
     email: req.body.email,
-    password: req.body.password
+    password: req.body.password,
+    profileURL: req.body.profileURL
   };
   var newUser = new User(user);
   newUser
@@ -130,7 +140,7 @@ function addUser(req, res, next) {
       console.log("User added to the database");
       next();
     })
-    .catch(e => res.send(e));
+    .catch(e => res.status(201).send(e));
 }
 
 function verifyToken(req, res, next) {

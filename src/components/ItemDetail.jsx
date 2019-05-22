@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect, useContext } from "react";
-import "./ItemDetail.css";
+import "./css/ItemDetail.css";
 import serverUrl from "../url";
 import axios from "axios";
 import { UserContext } from "../UserProvider";
@@ -50,9 +50,8 @@ function ItemDetail({ match, history }) {
       postId: id,
       user: {
         author: user.name,
-        profileUrl:
-          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-        id: user._id
+        profileURL: user.profileURL,
+        userId: user._id
       },
       review: newReview
     };
@@ -67,6 +66,10 @@ function ItemDetail({ match, history }) {
       })
       .catch(e => console.log(e));
   }
+  const defaultSrc =
+    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
+  const src = user.profileURL ? user.profileURL : defaultSrc;
+  console.log(user);
   return (
     <div className="item-detail">
       {error}
@@ -99,10 +102,7 @@ function ItemDetail({ match, history }) {
           {user ? (
             <div className="add-review">
               <div className="profile-img">
-                <img
-                  src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-                  alt="profile-img"
-                />
+                <img src={src} alt="profile-img" />
               </div>
               <textarea
                 type="text"
@@ -131,8 +131,8 @@ function Review({ review }) {
   const defaultSrc =
     "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
   const src = review.user
-    ? review.user.profileUrl
-      ? review.user.profileUrl
+    ? review.user.profileURL
+      ? review.user.profileURL
       : defaultSrc
     : defaultSrc;
   console.log(src);

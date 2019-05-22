@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { UserContext } from "../UserProvider";
 
-export default function Navbar({ history }) {
+function Navbar({ history }) {
   const { user } = useContext(UserContext);
   return (
     <div className="nav">
@@ -37,3 +37,5 @@ export default function Navbar({ history }) {
     </div>
   );
 }
+
+export default withRouter(Navbar);

@@ -4,9 +4,9 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 // const apiRoute = require("./routes/routes");
 var cors = require("cors");
-const Image = require("./imageModel");
-const Review = require("./reviewModel");
-const authRoute = require("./routes/routes");
+const Image = require("./models/imageModel");
+const Review = require("./models/reviewModel");
+const authRoute = require("./routes/authRoute");
 const userController = require("./controllers/userController");
 
 const app = express();
@@ -56,6 +56,8 @@ app.post("add-like", (req, res) => {
 app.post("/add-review", userController.verifyJwt, (req, res) => {
   // console.log(req.body);
   var options = { upsert: true, new: true, setDefaultsOnInsert: true };
+
+  console.log(req.body.data);
 
   const NewReview = new Review(req.body.data);
 
