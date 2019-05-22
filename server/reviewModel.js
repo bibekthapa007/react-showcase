@@ -11,6 +11,8 @@ const reviewSchema = new Schema({
     // unique: true,
     required: true
   },
+  parentId: Schema.Types.ObjectId,
+  slug: String,
   user: {
     author: String,
     profileURL: String

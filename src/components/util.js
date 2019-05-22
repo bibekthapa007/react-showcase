@@ -24,6 +24,7 @@ function isValidString(str, data) {
 }
 
 function isFromValid(data) {
+  errors = {};
   isURL(data.link);
   isValidString(data.title, "title");
   isValidString(data.artist, "artist");

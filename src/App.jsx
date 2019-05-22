@@ -5,6 +5,9 @@ import Navbar from "./components/Navbar";
 import Dashboard from "./components/Dashboard";
 import ItemDetail from "./components/ItemDetail";
 import NotFound from "./components/NotFound";
+import SignIn from "./components/SignIn";
+import VerifyToken from "./components/VerifyToken";
+import Login from "./components/Login";
 
 function App() {
   return (
@@ -14,7 +17,10 @@ function App() {
           <Navbar />
           <Switch>
             <Route exact path="/" component={Dashboard} />
-            <Route exact path="/:id" component={ItemDetail} />
+            <Route exact path="/image/:id" component={ItemDetail} />
+            <Route exact path="/signin" component={SignIn} />
+            <Route exact path="/verify" component={VerifyToken} />
+            <Route exact path="/login" component={Login} />
 
             <Route component={NotFound} />
           </Switch>

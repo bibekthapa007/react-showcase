@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 var cors = require("cors");
 const Image = require("./imageModel");
 const Review = require("./reviewModel");
+const authRoute = require("./routes/routes");
 
 const app = express();
 var port = process.env.PORT || 5000;
@@ -122,7 +123,7 @@ app.get("/image/:id", (req, res) => {
   // .catch(e => console.log(e));
 });
 
-// app.use("/api", apiRoute);
+app.use("/auth", authRoute);
 
 app.listen(port, () => {
   console.log("Server is running in port 5000");

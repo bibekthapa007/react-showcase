@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import "./ItemDetail.css";
+import serverUrl from "../url";
 
 function ItemDetail({ match }) {
   const [image, setImage] = useState({});
@@ -12,7 +13,7 @@ function ItemDetail({ match }) {
     async function fetchImages() {
       const id = match.params.id;
       console.log(id, "image id");
-      await fetch(`http://localhost:5000/image/${id}`)
+      await fetch(`${serverUrl}/image/${id}`)
         .then(result => result.json())
         .then(data => setImage(data.image))
         .catch(e => console.log(e));
@@ -22,7 +23,7 @@ function ItemDetail({ match }) {
   useEffect(() => {
     async function fetchReviews() {
       const id = match.params.id;
-      await fetch(`http://localhost:5000/reviews/${id}`)
+      await fetch(`${URL}/reviews/${id}`)
         .then(result => result.json())
         .then(data => setReviews(data))
         .catch(e => console.log(e));
@@ -32,7 +33,7 @@ function ItemDetail({ match }) {
 
   const { _id, link, title, artist, medium, contributor } = image;
   function handleReview(id) {
-    const url = `http://localhost:5000/add-review`;
+    const url = `${URL}/add-review`;
     console.log(id);
     const data = {
       postId: id,

@@ -4,12 +4,12 @@ import Modal from "./Modal";
 import AddItem from "./AddItem";
 import { withRouter } from "react-router-dom";
 import Pagination from "./Pagination";
+import serverUrl from "../url";
 
 function Dashboard({ history }) {
   const [show, setShow] = useState(false);
   const [images, setImages] = useState("");
   // const []
-
   function showModal() {
     setShow(true);
     document.documentElement.style.overflow = "hidden";
@@ -29,7 +29,7 @@ function Dashboard({ history }) {
   useEffect(() => {
     async function fetchImages() {
       console.log("I am runining");
-      await fetch("http://localhost:5000/images/?id=1&perPage=10")
+      await fetch(`${serverUrl}/images/?id=1&perPage=10`)
         .then(result => result.json())
         .then(data => setImages(data.images));
     }
@@ -54,7 +54,7 @@ function Dashboard({ history }) {
               <Item
                 key={index}
                 onClick={() => {
-                  history.push(`/${image._id}`);
+                  history.push(`/image/${image._id}`);
                 }}
                 image={image}
               />
