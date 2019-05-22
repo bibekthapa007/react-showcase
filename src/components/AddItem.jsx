@@ -1,7 +1,16 @@
 import React from "react";
 import { useInput } from "./useInputHook";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { isFromValid } from "./util";
+import axios from "axios";
+import { UserContext } from "../UserProvider";
+const authAxios = axios.create();
+
+authAxios.interceptors.request.use(config => {
+  const token = localStorage.getItem("token");
+  config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
 
 function AddItem({ handleClose, addImageCb }) {
   const { value: link, bind: bindLink, reset: resetLink } = useInput("");
@@ -13,41 +22,43 @@ function AddItem({ handleClose, addImageCb }) {
     bind: bindContributor,
     reset: resetContributor
   } = useInput("");
+  const context = useContext(UserContext);
+  console.log(context);
 
   const [error, setError] = useState({});
+  const [message, setMessage] = useState(null);
 
   const handleSubmit = event => {
     //TODO: add item to mongodb
     // const thisEvent = event;
     event.preventDefault();
+
     const data = {
       link: link,
       title: title,
       artist: artist,
-      medium: medium,
-      contributor: contributor
+      medium: medium
     };
     const isError = isFromValid(data);
     console.log(isError);
     if (isError === true) {
-      fetch("http://localhost:5000/add-image", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ data: data })
-      })
-        .then(e => {
-          console.log(data);
-          resetArtist();
-          resetContributor();
-          resetMedium();
-          resetLink();
-          resetTitle();
-          handleClose();
-          event.preventDefault();
-          addImageCb();
+      authAxios
+        .post("http://localhost:5000/add-image", {
+          data: data
+        })
+        .then(d => {
+          console.log(d);
+          if (d.status === 200) {
+            resetArtist();
+            resetContributor();
+            resetMedium();
+            resetLink();
+            resetTitle();
+            handleClose();
+            addImageCb();
+          } else if (d.status === 201) {
+            setMessage("Please Login to add Image");
+          }
         })
         .catch(err => console.log(err));
     } else {
@@ -56,6 +67,7 @@ function AddItem({ handleClose, addImageCb }) {
   };
   return (
     <form className="add-item-form" onSubmit={handleSubmit}>
+      {message}
       <h1>Add Art Piece</h1>
       <div className="error">{error.link}</div>
       <input type="text" placeholder="Art Link" {...bindLink} />

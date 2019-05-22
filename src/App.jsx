@@ -8,24 +8,26 @@ import NotFound from "./components/NotFound";
 import SignIn from "./components/SignIn";
 import VerifyToken from "./components/VerifyToken";
 import Login from "./components/Login";
+import UserProvider from "./UserProvider";
 
 function App() {
   return (
     <div className="App">
-      <Router>
-        <>
-          <Navbar />
-          <Switch>
-            <Route exact path="/" component={Dashboard} />
-            <Route exact path="/image/:id" component={ItemDetail} />
-            <Route exact path="/signin" component={SignIn} />
-            <Route exact path="/verify" component={VerifyToken} />
-            <Route exact path="/login" component={Login} />
-
-            <Route component={NotFound} />
-          </Switch>
-        </>
-      </Router>
+      <UserProvider>
+        <Router>
+          <>
+            <Navbar />
+            <Switch>
+              <Route exact path="/" component={Dashboard} />
+              <Route exact path="/image/:id" component={ItemDetail} />
+              <Route exact path="/signin" component={SignIn} />
+              <Route exact path="/verify" component={VerifyToken} />
+              <Route exact path="/login" component={Login} />
+              <Route component={NotFound} />
+            </Switch>
+          </>
+        </Router>
+      </UserProvider>
     </div>
   );
 }

@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { UserContext } from "../UserProvider";
 
-export default function Navbar() {
+export default function Navbar({ history }) {
+  const { user } = useContext(UserContext);
   return (
     <div className="nav">
       <div className="navWrapper">
@@ -27,6 +29,9 @@ export default function Navbar() {
               Twitter
             </a>
           </div>
+          {user ? null : (
+            <button onClick={() => history.push("/login")}>Login</button>
+          )}
         </div>
       </div>
     </div>

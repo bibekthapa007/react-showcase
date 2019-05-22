@@ -9,7 +9,7 @@ import serverUrl from "../url";
 function Dashboard({ history }) {
   const [show, setShow] = useState(false);
   const [images, setImages] = useState("");
-  // const []
+
   function showModal() {
     setShow(true);
     document.documentElement.style.overflow = "hidden";

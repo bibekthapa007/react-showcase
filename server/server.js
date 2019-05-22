@@ -7,6 +7,7 @@ var cors = require("cors");
 const Image = require("./imageModel");
 const Review = require("./reviewModel");
 const authRoute = require("./routes/routes");
+const userController = require("./controllers/userController");
 
 const app = express();
 var port = process.env.PORT || 5000;
@@ -25,39 +26,45 @@ app.get("/", (req, res) => {
   res.send("Hi there! go to /api to query.");
 });
 
-app.post("/add-image", (req, res) => {
-  console.log(req.body.data);
-  const data = req.body.data;
-  const NewImage = new Image(data);
-  NewImage.save((err, data) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log("Succesfully item added", data);
-      res.send({
-        message: "Sucessful",
-        data: data
-      });
-    }
-  });
-});
+app.post(
+  "/add-image",
+  userController.verifyJwt,
+  userController.verifyUser,
+  (req, res) => {
+    console.log(req.body);
+    const data = req.body.data;
+    console.log(req.userdoc);
+    const NewImage = new Image(data);
+    NewImage.save((err, data) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("Succesfully item added", data);
+        res.send({
+          message: "Sucessful",
+          data: data
+        });
+      }
+    });
+  }
+);
 
 app.post("add-like", (req, res) => {
   //:TODO: add the like
 });
 
-app.post("/add-review", (req, res) => {
+app.post("/add-review", userController.verifyJwt, (req, res) => {
   // console.log(req.body);
   var options = { upsert: true, new: true, setDefaultsOnInsert: true };
 
-  const NewReview = new Review(req.body);
+  const NewReview = new Review(req.body.data);
 
   NewReview.save((err, data) => {
     if (err) {
       console.log(err);
     } else {
       console.log("Succesfully item added", data);
-      res.send({
+      res.status(200).send({
         message: "Sucessful",
         data: data
       });

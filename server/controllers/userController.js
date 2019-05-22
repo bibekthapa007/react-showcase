@@ -6,6 +6,7 @@ const Token = require("../models/tokenModel");
 
 //check the user from database
 function verifyUser(req, res, next) {
+  console.log(req.body);
   User.findOne(
     { email: req.body.email, password: req.body.password },
     (err, docs) => {
@@ -23,6 +24,8 @@ function verifyUser(req, res, next) {
           message: "Your account has not been verified."
         });
       } else {
+        req.userdoc = docs;
+        console.log(docs);
         next();
       }
     }
@@ -78,7 +81,7 @@ function generateJwt(req, res, next) {
       res.json({
         message: "Sucessfully token generated.",
         token: token,
-        user: user
+        user: req.userdoc
       });
     }
   );
@@ -91,14 +94,22 @@ function verifyJwt(req, res, next) {
     jwt.verify(token, process.env.PUBLIC_KEY, (err, decoded) => {
       //TODO: manage if/else statement
       if (err) {
-        res.send(err);
+        console.log("error verifyJwt");
+        res.status(201).send({
+          message: "Unauthorized access"
+        });
       } else {
         console.log("Token Valid", decoded);
+        req.body.email = decoded.user.email;
+        req.body.password = decoded.user.password;
         next();
       }
     });
   } catch (e) {
-    res.send("Token required in authorization header.");
+    console.log("Toekn not found");
+    res.status(201).send({
+      message: "Unauthorized access"
+    });
   }
 }
 

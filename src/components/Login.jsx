@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import serverUrl from "../url";
+import { UserContext } from "../UserProvider";
 
-function Login() {
+function Login({ history }) {
+  const { login } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [message, setMessage] = useState(null);
   function handleSubmit() {
     setMessage(null);
@@ -29,6 +30,8 @@ function Login() {
       .then(d => {
         if (status === 200) {
           console.log(d);
+          login(d.user, d.token);
+          history.push("/");
         } else {
           setMessage(d.message);
         }

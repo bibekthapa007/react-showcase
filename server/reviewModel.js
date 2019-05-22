@@ -15,7 +15,8 @@ const reviewSchema = new Schema({
   slug: String,
   user: {
     author: String,
-    profileURL: String
+    profileURL: String,
+    userId: Schema.Types.ObjectId
   },
   review: String,
   date: {

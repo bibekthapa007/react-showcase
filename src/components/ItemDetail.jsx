@@ -1,13 +1,24 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import "./ItemDetail.css";
 import serverUrl from "../url";
+import axios from "axios";
+import { UserContext } from "../UserProvider";
+const authAxios = axios.create();
 
-function ItemDetail({ match }) {
+authAxios.interceptors.request.use(config => {
+  const token = localStorage.getItem("token");
+  config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
+function ItemDetail({ match, history }) {
+  const { user } = useContext(UserContext);
   const [image, setImage] = useState({});
   const [reviews, setReviews] = useState([]);
   const [newReview, setNewReview] = useState("");
   const [like, setLike] = useState(12);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function fetchImages() {
@@ -23,7 +34,7 @@ function ItemDetail({ match }) {
   useEffect(() => {
     async function fetchReviews() {
       const id = match.params.id;
-      await fetch(`${URL}/reviews/${id}`)
+      await fetch(`${serverUrl}/reviews/${id}`)
         .then(result => result.json())
         .then(data => setReviews(data))
         .catch(e => console.log(e));
@@ -33,33 +44,32 @@ function ItemDetail({ match }) {
 
   const { _id, link, title, artist, medium, contributor } = image;
   function handleReview(id) {
-    const url = `${URL}/add-review`;
+    const url = `${serverUrl}/add-review`;
     console.log(id);
     const data = {
       postId: id,
       user: {
-        author: "Bibek Thapa",
-        profileURL:
-          "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+        author: user.name,
+        profileUrl:
+          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+        id: user._id
       },
       review: newReview
     };
-    fetch(url, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-      .then(res => res.json())
+    authAxios
+      .post(url, {
+        data
+      })
       .then(d => {
-        setReviews([d.data, ...reviews]);
+        console.log(d);
+        setReviews([d.data.data, ...reviews]);
         setNewReview("");
       })
       .catch(e => console.log(e));
   }
   return (
     <div className="item-detail">
+      {error}
       <div className="item-img">
         <div className="main-img ">
           <img src={link} alt="images" />
@@ -79,29 +89,37 @@ function ItemDetail({ match }) {
             </span>
           </div>
         </div>
+
         <div className="review-section">
           {reviews
             ? reviews.map(review => {
                 return <Review key={review._id} review={review} />;
               })
             : null}
-          <div className="add-review">
-            <div className="profile-img">
-              <img
-                src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-                alt="profile-img"
+          {user ? (
+            <div className="add-review">
+              <div className="profile-img">
+                <img
+                  src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                  alt="profile-img"
+                />
+              </div>
+              <textarea
+                type="text"
+                value={newReview}
+                title="add-review"
+                onChange={e => setNewReview(e.target.value)}
               />
+              {newReview.length > 0 ? (
+                <button onClick={() => handleReview(_id)}>Post</button>
+              ) : null}
             </div>
-            <textarea
-              type="text"
-              value={newReview}
-              title="add-review"
-              onChange={e => setNewReview(e.target.value)}
-            />
-            {newReview.length > 0 ? (
-              <button onClick={() => handleReview(_id)}>Post</button>
-            ) : null}
-          </div>
+          ) : (
+            <div>
+              Please Login To Comment
+              <button onClick={() => history.push("/login")}>Login</button>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -109,17 +127,23 @@ function ItemDetail({ match }) {
 }
 
 function Review({ review }) {
+  console.log(review);
+  const defaultSrc =
+    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
+  const src = review.user
+    ? review.user.profileUrl
+      ? review.user.profileUrl
+      : defaultSrc
+    : defaultSrc;
+  console.log(src);
   return (
     <div className="review">
       <div className="profile-img">
-        <img
-          src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-          alt="profile-img"
-        />
+        <img src={src} alt="profile-img" />
       </div>
       <div className="review-content">
-        <div className="name">{review.user.author}</div>
-        <div className="message">{review.review}</div>
+        <div className="name">{review.user ? review.user.author : null}</div>
+        <div className="message">{review.review ? review.review : null}</div>
       </div>
     </div>
   );
